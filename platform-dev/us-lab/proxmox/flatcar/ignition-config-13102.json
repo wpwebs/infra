@@ -1,0 +1,56 @@
+{
+  "ignition": {
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBFbyWieEktVXLQPO5pPP59T7rHSGukGMUG4KCQdUqBB"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "files": [
+      {
+        "path": "/etc/hostname",
+        "contents": {
+          "source": "data:,worker-2"
+        },
+        "mode": 420
+      },
+      {
+        "path": "/etc/machine-id",
+        "contents": {
+          "source": "data:,C5F98CA0-86F7-4042-95E7-438AACD63499"
+        },
+        "mode": 420
+      },
+      {
+        "path": "/etc/systemd/network/00-eth0.network",
+        "contents": {
+          "source": "data:,%5BMatch%5D%0AName=eth0%0A%5BNetwork%5D%0AAddress=10.0.3.102/24%0AGateway=10.0.6.1%0ADNS=10.0.6.1%0A"
+        },
+        "mode": 420
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "name": "sshd.service",
+        "enabled": true
+      },
+      {
+        "name": "systemd-networkd.service",
+        "enabled": true
+      },
+      {
+        "name": "systemd-resolved.service",
+        "enabled": true
+      }
+    ]
+  }
+}

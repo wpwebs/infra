@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lean-cli
+  namespace: benbox-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lean-cli
+  template:
+    metadata:
+      labels:
+        app: lean-cli
+    spec:
+      containers:
+      - name: lean-cli
+        image: quantconnect/lean:foundation
+        ports:
+        - containerPort: 5678
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+        volumeMounts:
+        - name: benbox-volume
+          mountPath: /benbox
+      volumes:
+      - name: benbox-volume
+        persistentVolumeClaim:
+          claimName: benbox-pvc

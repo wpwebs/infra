@@ -1,0 +1,17 @@
+Starting deployment script...
+Namespace: lean-engine
+Deployment Name: lean-engine-deployment
+Service Name: lean-engine-service
+Docker Image: quantconnect/lean:foundation
+Container Port: 8080
+Project Directory: /Users/henry/benbox/LEAN
+Container Project Directory: /Lean
+Checking if namespace exists...
+NAME          STATUS   AGE
+lean-engine   Active   57m
+Namespace already exists. Skipping creation.
+Creating or updating deployment...
+deployment.apps/lean-engine-deployment configured
+Creating or updating service...
+service/lean-engine-service unchanged
+LEAN Engine deployed to Kubernetes successfully.

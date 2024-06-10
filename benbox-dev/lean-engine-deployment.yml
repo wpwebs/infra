@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lean-engine-deployment
+  namespace: lean-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lean-engine
+  template:
+    metadata:
+      labels:
+        app: lean-engine
+    spec:
+      containers:
+      - name: lean-engine
+        image: quantconnect/lean:foundation
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: project-volume
+          mountPath: /benbox
+        env:
+        - name: DOTNET_CLI_TELEMETRY_OPTOUT
+          value: "1"
+        - name: DOTNET_SKIP_FIRST_TIME_EXPERIENCE
+          value: "true"
+      volumes:
+      - name: project-volume
+        hostPath:
+          path: /Users/henry/benbox

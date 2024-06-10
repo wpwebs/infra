@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lean-cli
+  namespace: benbox-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lean-cli
+  template:
+    metadata:
+      labels:
+        app: lean-cli
+    spec:
+      containers:
+      - name: lean-cli
+        image: 
+        ports:
+        - containerPort: 5678
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+        volumeMounts:
+        - name: benbox-volume
+          mountPath: benbox
+        hostPath:
+          path: /Users/henry/benbox
+        env:
+        - name: DOTNET_CLI_TELEMETRY_OPTOUT
+          value: "1"
+        - name: DOTNET_SKIP_FIRST_TIME_EXPERIENCE
+          value: "true"
+      volumes:
+      - name: benbox-volume
+        persistentVolumeClaim:
+          claimName: lean-cli-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lean-cli-storage
+  namespace: benbox-dev
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+      
