@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Variables
-VM_NAME=${1-"pve1m1"}
-VM_PATH="/Users/henry/proxmox/qemu/vms/$VM_NAME"
+NODE=${1-"1"}
+VM_NAME="pve1$NODE"
+VM_BASE_PATH="/Users/henry/infra/platform-dev/us-lab"
+VM_PATH="$VM_BASE_PATH/qemu/vms/$VM_NAME"
 
 # Stop the VM if it is running
 VM_PID=$(pgrep -f "qemu.*$VM_NAME")

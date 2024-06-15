@@ -1,16 +1,20 @@
 #!/bin/bash
 
+# Find the PID of the QEMU process
 # Variables
-VM_NAME=${1-"pve1m1"}
-VM_PATH="/Users/henry/proxmox/qemu/vms/$VM_NAME"
+NODE=${1-"1"}
+VM_NAME=${2-"pve1$NODE"}
 
-# Find the PID of the running VM
-VM_PID=$(pgrep -f "qemu")
+# Find the PIDs of the QEMU processes
+PIDS=$(pgrep -f "qemu-system-x86_64.*-name $VM_NAME")
 
-if [ -z "$VM_PID" ]; then
-  echo "VM $VM_NAME is not running."
+if [ -n "$PIDS" ]; then
+  echo "Stopping VM with PIDs: $PIDS..."
+  for PID in $PIDS; do
+    kill -SIGTERM $PID
+    echo "Sent SIGTERM to PID $PID"
+  done
+  echo "All related QEMU processes have been stopped."
 else
-  echo "Stopping VM $VM_NAME (PID: $VM_PID)..."
-  kill $VM_PID
-  echo "VM $VM_NAME stopped."
+  echo "No running VM processes found with name $VM_NAME."
 fi
