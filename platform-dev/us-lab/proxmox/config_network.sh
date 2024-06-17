@@ -34,9 +34,6 @@ configure_interfaces() {
     cat <<EOL > /etc/network/interfaces
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
-
-source /etc/network/interfaces.d/*
-
 # The loopback network interface
 auto lo
 iface lo inet loopback
@@ -44,32 +41,35 @@ iface lo inet loopback
 # Bonding interface
 auto bond0
 iface bond0 inet static
-  address $node_ip$SUBNET
-  netmask 255.255.255.128  # Adjust according to the subnet mask
-  gateway $GATEWAY
-  dns-nameservers $DNS
-  bond-slaves $INTERFACE1 $INTERFACE2
-  bond-mode active-backup
-  bond-miimon 100
-  bond-primary $INTERFACE1
+	bond-slaves enp2s0 enp0s31f6
+	bond-mode active-backup
+	bond-miimon 100
+	bond-primary enp2s0
 
 # VLAN-aware bridge
 auto vmbr0
-iface vmbr0 inet manual
-  bridge_ports bond0
-  bridge_stp off
-  bridge_fd 0
-  bridge_vlan_aware yes
+iface vmbr0 inet static
+	address 192.168.0.151
+	netmask 255.255.255.128
+	gateway 192.168.0.129
+	dns-nameservers 192.168.0.129
+	bridge-ports bond0
+	bridge-stp off
+	bridge-fd 0
+	bridge-vlan-aware yes
 
 # Interface $INTERFACE1
-allow-hotplug $INTERFACE1
-iface $INTERFACE1 inet manual
-  bond-master bond0
+allow-hotplug enp2s0
+iface enp2s0 inet manual
+	bond-master bond0
 
 # Interface $INTERFACE2
-allow-hotplug $INTERFACE2
-iface $INTERFACE2 inet manual
-  bond-master bond0
+allow-hotplug enp0s31f6
+iface enp0s31f6 inet manual
+	bond-master bond0
+
+source /etc/network/interfaces.d/*
+
 EOL
 
     echo \"Network interfaces configured on $node.\"
