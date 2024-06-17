@@ -72,6 +72,9 @@ configure_node() {
     # Force time synchronization
     echo "Forcing time synchronization"
     chronyc -a makestep
+    
+    # Add cron job to force sync time daily
+    (crontab -l 2>/dev/null; echo "0 3 * * * /usr/sbin/chronyc -a 'burst 4/4'") | crontab -
 EOM
 
     if [ $? -ne 0 ]; then
